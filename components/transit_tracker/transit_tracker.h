@@ -18,6 +18,11 @@ struct RouteStyle {
   Color color;
 };
 
+struct DestinationStyle {
+  std::string headsign;
+  Color color;
+};
+
 enum UnitDisplay : uint8_t {
   UNIT_DISPLAY_LONG,
   UNIT_DISPLAY_SHORT,
@@ -53,12 +58,10 @@ class TransitTracker : public Component {
     void add_abbreviation(const std::string &from, const std::string &to) { abbreviations_[from] = to; }
     void set_default_route_color(const Color &color) { default_route_color_ = color; }
     void add_route_style(const std::string &route_id, const std::string &name, const Color &color) { route_styles_[route_id] = RouteStyle{name, color}; }
+    void add_destination_style(const std::string &headsign, const Color &color) { destination_styles_.push_back({headsign, color}); }
 
-    void set_display_mode_from_text(const std::string &text);
     void set_abbreviations_from_text(const std::string &text);
     void set_route_styles_from_text(const std::string &text);
-
-    void set_display_mode(const std::string &mode) { this->display_mode_ = mode; }
 
   protected:
     std::string from_now_(time_t unix_timestamp) const;
@@ -92,8 +95,7 @@ class TransitTracker : public Component {
     std::map<std::string, std::string> abbreviations_;
     Color default_route_color_ = Color(0x028e51);
     std::map<std::string, RouteStyle> route_styles_;
-
-    std::string display_mode_{"sequential"};
+    std::vector<DestinationStyle> destination_styles_;
 };
 
 

@@ -30,7 +30,7 @@ CONF_FEED_CODE = "feed_code"
 CONF_DEFAULT_ROUTE_COLOR = "default_route_color"
 CONF_TIME_DISPLAY = "time_display"
 CONF_LIST_MODE = "list_mode"
-CONF_DISPLAY_MODE = "display_mode"
+CONF_DESTINATION_STYLES = "destination_styles"
 
 def validate_ws_url(value):
     url = cv.url(value)
@@ -82,8 +82,13 @@ CONFIG_SCHEMA = cv.Schema(
                 }
             )
         ),
-        cv.Optional(CONF_DISPLAY_MODE, default="destination"): cv.one_of(
-            "sequential", "destination", upper=False
+        cv.Optional(CONF_DESTINATION_STYLES): cv.ensure_list(
+            cv.Schema(
+                {
+                    cv.Required("headsign"): cv.string,
+                    cv.Required("color"): cv.string,
+                }
+            )
         ),
     }
 ).extend(cv.COMPONENT_SCHEMA)
@@ -123,7 +128,6 @@ async def to_code(config):
     cg.add(var.set_limit(config[CONF_LIMIT]))
 
     cg.add(var.set_unit_display(config[CONF_SHOW_UNITS]))
-    cg.add(var.set_display_mode(config[CONF_DISPLAY_MODE]))
 
     if CONF_ABBREVIATIONS in config:
         for abbreviation in config[CONF_ABBREVIATIONS]:
@@ -138,8 +142,14 @@ async def to_code(config):
             color_struct = await cg.get_variable(style["color"])
             cg.add(var.add_route_style(style["route_id"], style["name"], color_struct))
 
+    if CONF_DESTINATION_STYLES in config:
+        for dest in config[CONF_DESTINATION_STYLES]:
+            color_val = int(dest["color"], 16)
+            cg.add(var.add_destination_style(dest["headsign"], cg.RawExpression(f"Color(0x{color_val:06x})")))
+
     await cg.register_component(var, config)
 
+    cg.add_library("WiFi", None)
     cg.add_library("WiFiClientSecure", None)
     cg.add_library("HTTPClient", None)
 

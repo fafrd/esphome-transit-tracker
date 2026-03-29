@@ -53,7 +53,8 @@ text:
     on_value:
       then:
         lambda: |-
-          id(tracker).set_base_url(id(base_url_config)->state);
+          if (!id(base_url_config)->state.empty())
+            id(tracker).set_base_url(id(base_url_config)->state);
 
   - platform: template
     id: feed_code_config
@@ -63,7 +64,8 @@ text:
     on_value:
       then:
         lambda: |-
-          id(tracker).set_feed_code(id(feed_code_config)->state);
+          if (!id(feed_code_config)->state.empty())
+            id(tracker).set_feed_code(id(feed_code_config)->state);
 
   - platform: template
     id: schedule_config
@@ -73,7 +75,8 @@ text:
     on_value:
       then:
         lambda: |-
-          id(tracker).set_schedule_string(id(schedule_config)->state);
+          if (!id(schedule_config)->state.empty())
+            id(tracker).set_schedule_string(id(schedule_config)->state);
 
   - platform: template
     id: abbreviations_config
@@ -83,7 +86,8 @@ text:
     on_value:
       then:
         lambda: |-
-          id(tracker).set_abbreviations_from_text(id(abbreviations_config)->state);
+          if (!id(abbreviations_config)->state.empty())
+            id(tracker).set_abbreviations_from_text(id(abbreviations_config)->state);
 
   - platform: template
     id: route_styles_config
@@ -93,18 +97,8 @@ text:
     on_value:
       then:
         lambda: |-
-          id(tracker).set_route_styles_from_text(id(route_styles_config)->state);
-
-  # New text-based config to change display_mode via a POST
-  - platform: template
-    id: display_mode_config
-    mode: text
-    optimistic: true
-    restore_value: true
-    on_value:
-      then:
-        lambda: |-
-          id(tracker).set_display_mode_from_text(id(display_mode_config)->state);
+          if (!id(route_styles_config)->state.empty())
+            id(tracker).set_route_styles_from_text(id(route_styles_config)->state);
 
   - platform: template
     id: limit_config
@@ -114,7 +108,8 @@ text:
     on_value:
       then:
         lambda: |-
-          id(tracker).set_limit(atoi(id(limit_config)->state.c_str()));
+          if (!id(limit_config)->state.empty())
+            id(tracker).set_limit(atoi(id(limit_config)->state.c_str()));
 
 number:
   - platform: hub75_matrix_display
@@ -135,7 +130,7 @@ light:
     name: Display Brightness
     id: display_brightness
     output: display_brightness_output
-    restore_mode: RESTORE_DEFAULT_ON
+    restore_mode: ALWAYS_ON
 
 script:
   - id: dim_display
@@ -222,3 +217,18 @@ web_server:
 
 transit_tracker:
   id: tracker
+  base_url: "wss://tt.horner.tj/"
+  feed_code: "st"
+  limit: 10
+  show_units: short
+  time_display: departure
+  stops:
+    - stop_id: "1_64140"
+      routes: ["40_100239"]
+    - stop_id: "1_64065"
+      routes: ["40_100239"]
+  destination_styles:
+    - headsign: "Seattle"
+      color: "3e54b6"
+    - headsign: "Bellevue"
+      color: "9135ed"
