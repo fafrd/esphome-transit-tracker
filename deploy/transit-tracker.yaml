@@ -49,7 +49,7 @@ text:
     id: base_url_config
     mode: text
     optimistic: true
-    restore_value: true
+    restore_value: false
     on_value:
       then:
         lambda: |-
@@ -60,7 +60,7 @@ text:
     id: feed_code_config
     mode: text
     optimistic: true
-    restore_value: true
+    restore_value: false
     on_value:
       then:
         lambda: |-
@@ -71,7 +71,7 @@ text:
     id: schedule_config
     mode: text
     optimistic: true
-    restore_value: true
+    restore_value: false
     on_value:
       then:
         lambda: |-
@@ -82,7 +82,7 @@ text:
     id: abbreviations_config
     mode: text
     optimistic: true
-    restore_value: true
+    restore_value: false
     on_value:
       then:
         lambda: |-
@@ -93,7 +93,7 @@ text:
     id: route_styles_config
     mode: text
     optimistic: true
-    restore_value: true
+    restore_value: false
     on_value:
       then:
         lambda: |-
@@ -104,7 +104,7 @@ text:
     id: limit_config
     mode: text
     optimistic: true
-    restore_value: true
+    restore_value: false
     on_value:
       then:
         lambda: |-
@@ -223,10 +223,15 @@ transit_tracker:
   show_units: short
   time_display: departure
   stops:
-    - stop_id: "1_64140"
-      routes: ["40_100239"]
-    - stop_id: "1_64065"
-      routes: ["40_100239"]
+    - stop_id: "40_E07-T1"
+      routes: ["40_2LINE"]
+    - stop_id: "40_E07-T2"
+      routes: ["40_2LINE"]
+  abbreviations:
+    - from: "Lynnwood City Center"
+      to: "Seattle"
+    - from: "Downtown Redmond"
+      to: "Bellevue"
   destination_styles:
     - headsign: "Seattle"
       color: "3e54b6"
