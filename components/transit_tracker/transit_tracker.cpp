@@ -298,11 +298,11 @@ std::string TransitTracker::from_now_(time_t unix_timestamp) const {
   if (diff < 60) {
     switch (this->unit_display_) {
       case UNIT_DISPLAY_LONG:
-        return "0min";
+        return "<1min";
       case UNIT_DISPLAY_SHORT:
-        return "0m";
+        return "<1m";
       case UNIT_DISPLAY_NONE:
-        return "0";
+        return "<1";
     }
   }
 
